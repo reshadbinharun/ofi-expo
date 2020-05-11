@@ -8,11 +8,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
+import Identity from './screens/Identity';
 
 const Stack = createStackNavigator();
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  const [identity, setIdentity] = React.useState(null);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
@@ -51,7 +53,10 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            {
+              identity ? <Stack.Screen name="Root" component={BottomTabNavigator} /> :
+              <Stack.Screen name="Who are you?" component={Identity} />
+            }
           </Stack.Navigator>
         </NavigationContainer>
       </View>
